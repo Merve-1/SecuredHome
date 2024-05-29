@@ -20,19 +20,45 @@
 #include "HAL/BUZZER/inc/BUZZER_interface.h"
 #include "HAL/LCD/inc/LCD_interface.h"
 #include "HAL/KEYPAD/inc/KPD_interface.h"
+#include "HAL/DC/inc/DCMOTOR_interface.h"
+#include "HAL/Servo/inc/SRVM_interface.h"
+#include "HAL/EEPROM/inc/EEPROM_interface.h"
+#include "AES/inc/AES_interface.h" 
+
+
 #define PASSWORD_LENGTH 4 // Assuming the password length is 4 digits
 #define MAX_TRIALS      3   // Maximum number of password entry trials
+#define AES_BLOCK_SIZE  16  // AES block size
 
 
-int main(void)
-{
-	char password[PASSWORD_LENGTH + 1];        // Array to store the password (+1 for null terminator)
-	char input_password[PASSWORD_LENGTH + 1];  // Array to store the user input password
-	int i, trials, trailNumber = 0;
+void encryptPassword(const char *password, uint8_t *encrypted_password, const uint8_t *aes_key) {
+	// Ensure the password is AES_BLOCK_SIZE long
+	uint8_t buffer[AES_BLOCK_SIZE] = {0};
+	strncpy((char *)buffer, password, PASSWORD_LENGTH);
+	AES_encrypt(buffer, encrypted_password);
+}
+
+int main(void) {
+	char password[PASSWORD_LENGTH + 1]; // Array to store the password (+1 for null terminator)
+	char input_password[PASSWORD_LENGTH + 1]; // Array to store the user input password
+	uint8_t encrypted_password[AES_BLOCK_SIZE]; // Array to store the encrypted password
+	const uint8_t aes_key[AES_BLOCK_SIZE] = "1234567890ABCDEF"; // Example AES key (16 bytes)
+	int i, trials = 0, trailNumber = 0;
 	BOOL password_set = false;
 
+	// Initialize peripherals
 	LCD_voidInit(); // Initialize LCD
 	KPD_voidInit(); // Initialize Keypad
+	DCMOTOR_voidInit(DCMOTOR_A); // Initialize DC motor
+	SRVM_voidInit(); // Initialize Servo motor
+	LED_voidInit(DIO_PORTD, DIO_PIN7); // Initialize LED
+	// Initialize AES with the key
+	AES_init(aes_key);
+
+	// Check if the initializations are successful
+	LCD_voidSendCommand(0x01); // Clear Display
+	LCD_voidDisplayString("Init Done");
+	_delay_ms(2000);
 
 	// Ask the user to set the password
 	LCD_voidSendCommand(0x01); // Clear Display
@@ -48,6 +74,7 @@ int main(void)
 		LCD_voidDisplayChar('*'); // Display '*' instead of actual digits
 	}
 	password[PASSWORD_LENGTH] = '\0'; // Null terminate the password
+	encryptPassword(password, encrypted_password, aes_key); // Encrypt the password
 	password_set = true;
 
 	while (1) {
@@ -70,11 +97,35 @@ int main(void)
 			}
 			input_password[PASSWORD_LENGTH] = '\0'; // Null terminate the input password
 
-			// Check if the input password matches the stored password
-			if (strcmp(password, input_password) == 0) {
+			// Encrypt the input password
+			uint8_t encrypted_input_password[AES_BLOCK_SIZE] = {0};
+			encryptPassword(input_password, encrypted_input_password, aes_key);
+
+			// Check if the encrypted input password matches the stored encrypted password
+			if (memcmp(encrypted_password, encrypted_input_password, AES_BLOCK_SIZE) == 0) {
 				// Correct password entered, display "Door opened!" and exit the loop
 				LCD_voidSendCommand(0x01); // Clear Display
 				LCD_voidDisplayString("Door opened!");
+
+				// Turn on the LED
+				LED_voidTurnOn(DIO_PORTD, DIO_PIN7);
+				_delay_ms(5000);
+
+				// Turn off the LED
+				LED_voidTurnOff(DIO_PORTD, DIO_PIN7);
+
+				// Turn on the motor
+				DCMOTOR_voidOn(DCMOTOR_A, DCMOTOR_CLOCK_WISE);
+				_delay_ms(5000); // Keep the motor running for 5 seconds
+
+				// Turn off the motor
+				DCMOTOR_voidOff(DCMOTOR_A);
+
+				// Turn the servo motor to open the door
+				SRVM_voidOn(90); // Adjust the angle as needed to represent door opening
+				_delay_ms(5000); // Keep the servo in the open position for 5 seconds
+				SRVM_voidOff();
+
 				break;
 				} else {
 				// Incorrect password entered
@@ -86,18 +137,16 @@ int main(void)
 					LCD_voidDisplayString("Locked!");
 					break;
 					} else {
-					// Display "One trial passed" and wait for a while before clearing the display
+					// Display trial number passed and wait for a while before clearing the display
 					LCD_voidSendCommand(0x01); // Clear Display
 					trailNumber++;
-					if (1 == trailNumber){
-					LCD_voidDisplayString("One trial passed");
-					_delay_ms(2000); // Delay to read the message
-					}
-					else if (2 == trailNumber){
+					if (trailNumber == 1) {
+						LCD_voidDisplayString("One trial passed");
+						} else if (trailNumber == 2) {
 						LCD_voidDisplayString("Second trial passed");
-						_delay_ms(2000); // Delay to read the message
 					}
-					
+					_delay_ms(2000); // Delay to read the message
+
 					// Ask the user to re-enter the password
 					continue;
 				}
@@ -108,185 +157,8 @@ int main(void)
 			break; // Exit the loop as the password needs to be set first
 		}
 	}
-	
 
-	
-	while(1); // Infinite loop
-	
+	while (1); // Infinite loop
+
 	return 0;
-	
-	/************************************************************************/
-	/*                          Using LCD & KPD Drivers                     */
-	/************************************************************************/
-	/*
-	u8 local_u8Key;
-	KPD_voidInit();
-	LCD_voidInit();
-	
-	while(1){
-		
-		KPD_voidGetValue(&local_u8Key);
-		if(local_u8Key != KPD_NOT_PRESSED)
-		{
-			LCD_voidDisplayChar(local_u8Key);
-		}
-		
-	}
-	
-		
-	*/
-	/*
-	LCD_voidInit();
-	LCD_voidDisplayChar('D');
-	LCD_voidDisplayChar('5');
-	LCD_voidDisplayChar('9');
-	//LCD_voidDisplayString((u8*) "Embedded");// casting string (pointer to character)
-	
-
-	// Wait for a short duration
-	_delay_ms(1000);
-
-	// Clear the LCD
-	LCD_voidClear();
-	_delay_ms(1000);
-	
-	*/
-
-
-	
-	
-	/************************************************************************/
-	/*                       Using Switch Drivers                           */
-	/************************************************************************/
-	/*
-	// Initialize switches
-   
-	DIO_voidSetPinDirection(SWITCH_0_PORT,SWITCH_0_PIN, DIO_PIN_INPUT);
-	DIO_voidSetPinDirection(SWITCH_1_PORT,SWITCH_1_PIN, DIO_PIN_INPUT);
-	DIO_voidSetPinDirection(SWITCH_2_PORT,SWITCH_2_PIN, DIO_PIN_INPUT);
-
-    // Initialize LEDs
-    DIO_voidSetPinDirection(LED_0_PORT, LED_0_PIN, DIO_PIN_OUTPUT);
-    DIO_voidSetPinDirection(LED_1_PORT, LED_1_PIN, DIO_PIN_OUTPUT);
-    DIO_voidSetPinDirection(LED_2_PORT, LED_2_PIN, DIO_PIN_OUTPUT);
-	
-	// Initialize Buzzer
-	DIO_voidSetPinDirection(BUZZER_PORT,BUZZER_PIN, DIO_PIN_OUTPUT);
-
-    
-    u8 local_u8Sw0State, local_u8Sw1State, local_u8Sw2State;
-    
-    while (1) {
-        // Get state of switches
-        local_u8Sw0State = SWITCH_u8GetState(SWITCH_0_PORT, SWITCH_0_PIN);
-        local_u8Sw1State = SWITCH_u8GetState(SWITCH_1_PORT, SWITCH_1_PIN);
-        local_u8Sw2State = SWITCH_u8GetState(SWITCH_2_PORT, SWITCH_2_PIN);
-        
-        // Control LEDs based on switch states
-        if (local_u8Sw0State) {
-            DIO_voidSetPinValue(LED_0_PORT, LED_0_PIN, DIO_PIN_HIGH);
-        } else {
-            DIO_voidSetPinValue(LED_0_PORT, LED_0_PIN, DIO_PIN_LOW);
-        }
-        
-        if (local_u8Sw1State) {
-            DIO_voidTogglePinValue(LED_1_PORT, LED_1_PIN);
-            //DIO_voidTogglePinValue(DIO_PORTA, DIO_PIN3);
-			DIO_voidTogglePinValue(BUZZER_PORT,BUZZER_PIN);
-
-        }
-        
-        if (local_u8Sw2State) {
-            DIO_voidSetPinValue(LED_2_PORT, LED_2_PIN, DIO_PIN_LOW);
-        } else {
-            DIO_voidSetPinValue(LED_2_PORT, LED_2_PIN, DIO_PIN_HIGH);
-        }
-    }
-	*/
-	/************************************************************************/
-	/*				Task: 1) Turn on led0 if sw0 is pressed else off        */
-	/*				2) led2 on if sw2 isn't pressed else off                */
-	/*				3) toggle led1, buzzer if sw1 is pressed                */
-	/************************************************************************/
-	/*
-	u8 local_u8Sw0State, local_u8Sw1State, local_u8Sw2State;
-	
-	// DIO initalization 
-	DIO_voidSetPinDirection(DIO_PORTC,DIO_PIN2,DIO_PIN_OUTPUT); // LED0
-	DIO_voidSetPinDirection(DIO_PORTC,DIO_PIN7,DIO_PIN_OUTPUT); // LED1
-	DIO_voidSetPinDirection(DIO_PORTD,DIO_PIN3,DIO_PIN_OUTPUT); // LED2
-	DIO_voidSetPinDirection(DIO_PORTA,DIO_PIN3,DIO_PIN_OUTPUT); // BUZZ
-	DIO_voidSetPinDirection(DIO_PORTB,DIO_PIN0,DIO_PIN_INPUT);  // SW0
-	DIO_voidSetPinDirection(DIO_PORTD,DIO_PIN6,DIO_PIN_INPUT);  // SW1
-	DIO_voidSetPinDirection(DIO_PORTD,DIO_PIN2,DIO_PIN_INPUT);  // SW2
-	
-	
-	while (1){
-		DIO_voidGetPinValue(DIO_PORTB,DIO_PIN0,&local_u8Sw0State); 
-		DIO_voidGetPinValue(DIO_PORTD,DIO_PIN6,&local_u8Sw1State); 
-		DIO_voidGetPinValue(DIO_PORTD,DIO_PIN2,&local_u8Sw2State); 
-		
-		if(1 == local_u8Sw0State){
-				DIO_voidSetPinValue(DIO_PORTC,DIO_PIN2,DIO_PIN_HIGH);//LED0
-		}else{
-				DIO_voidSetPinValue(DIO_PORTC,DIO_PIN2,DIO_PIN_LOW);//LED0
-		}
-		if(1 == local_u8Sw1State){
-				DIO_voidTogglePinValue(DIO_PORTC,DIO_PIN7); //LED1 TOG
-				DIO_voidTogglePinValue(DIO_PORTA,DIO_PIN3); //BUZZ TOG
-		}
-		if (1 == local_u8Sw2State){
-				DIO_voidSetPinValue(DIO_PORTD,DIO_PIN3,DIO_PIN_LOW);//LED2
-			
-		}else{
-				DIO_voidSetPinValue(DIO_PORTD,DIO_PIN3,DIO_PIN_HIGH);//LED2
-		}
-		
-		
-	}
-	
-	
-	*/
-	/*************************************************************************************/
-	/* TASK: using DIO module turn on led0 and led2, then toggle led1, buzzer every 0.5s */
-	/*************************************************************************************/
-	// DIO INITIALIZATION
-	/*DIO_voidSetPinDirection(DIO_PORTC,DIO_PIN2,DIO_PIN_OUTPUT); // LED0
-	DIO_voidSetPinDirection(DIO_PORTC,DIO_PIN7,DIO_PIN_OUTPUT); // LED1
-	DIO_voidSetPinDirection(DIO_PORTD,DIO_PIN3,DIO_PIN_OUTPUT); // LED2
-	DIO_voidSetPinDirection(DIO_PORTA,DIO_PIN3,DIO_PIN_OUTPUT); // BUZZ
-	
-	DIO_voidSetPinValue(DIO_PORTC,DIO_PIN2,DIO_PIN_HIGH);//LED0
-	DIO_voidSetPinValue(DIO_PORTD,DIO_PIN3,DIO_PIN_HIGH);//LED2
-	
-    while (1) 
-    {
-		DIO_voidTogglePinValue(DIO_PORTC,DIO_PIN7); //LED1 TOG
-		DIO_voidTogglePinValue(DIO_PORTA,DIO_PIN3); //BUZZ TOG
-		_delay_ms(500);
-    }*/
-
-/* Driver code
-	// Initialize the LED
-    LED_voidInit();
-
-    while (1) {
-        // Turn on the LED
-        LED_voidTurnOn();
-		_delay_ms(500);
-        
-        // Turn off the LED
-        LED_voidTurnOff();
-		_delay_ms(500);
-
-
-        // Toggle the LED state
-        LED_voidToggle();
-		_delay_ms(500);
-
-    }
-
-    return 0;
-*/
 }
-

@@ -17,118 +17,137 @@
 #include "DIO_interface.h"
 #include "DIO_register.h"
 
+/*
+ * DIO_program.c
+ * 
+ * Actual implementations of DIO functions
+ */
+
+#include "STD_TYPES.h"
+#include "BIT_MATH.h"
+#include "DIO_interface.h"
+
+
+void DIO_voidSetPinDirection(u8 copy_u8PortId, u8 copy_u8PinId, u8 copy_u8PinDirection) {
+    	// constant values use switch (Faster)
+    	switch (copy_u8PortId)
+    	{
+	    	/*Port A*/
+	    	case DIO_PORTA:
+	    	switch(copy_u8PinDirection){
+		    	case DIO_PIN_OUTPUT:
+		    	SET_BIT(DDRA_REG,copy_u8PinId);
+		    	break;
+		    	
+		    	case DIO_PIN_INPUT:
+		    	CLR_BIT(DDRA_REG,copy_u8PinId);
+		    	break;
+	    	}
+	    	break;
+	    	/*Port B*/
+	    	case DIO_PORTB:
+	    	switch(copy_u8PinDirection){
+		    	case DIO_PIN_OUTPUT:
+		    	SET_BIT(DDRB_REG,copy_u8PinId);
+		    	break;
+		    	
+		    	case DIO_PIN_INPUT:
+		    	CLR_BIT(DDRB_REG,copy_u8PinId);
+		    	break;
+	    	}
+	    	break;
+	    	/*Port C*/
+	    	case DIO_PORTC:
+	    	switch(copy_u8PinDirection){
+		    	case DIO_PIN_OUTPUT:
+		    	SET_BIT(DDRC_REG,copy_u8PinId);
+		    	break;
+		    	
+		    	case DIO_PIN_INPUT:
+		    	CLR_BIT(DDRC_REG,copy_u8PinId);
+		    	break;
+	    	}
+	    	break;
+	    	/*Port D*/
+	    	case DIO_PORTD:
+	    	switch(copy_u8PinDirection){
+		    	case DIO_PIN_OUTPUT:
+		    	SET_BIT(DDRD_REG,copy_u8PinId);
+		    	break;
+		    	
+		    	case DIO_PIN_INPUT:
+		    	CLR_BIT(DDRD_REG,copy_u8PinId);
+		    	break;
+	    	}
+	    	break;
+    	}
+}
+
+void DIO_voidSetPinValue(u8 copy_u8PortId, u8 copy_u8PinId, u8 copy_u8PinValue) {
+    //u8 local_u8ErrorState = true;
+    // clean code "MISRA C"
+    if ((copy_u8PortId<4) && (copy_u8PortId<8) && (copy_u8PinValue<3)){
+	    switch(copy_u8PortId){
+		    case DIO_PORTA:
+		    switch(copy_u8PinValue){
+			    case DIO_PIN_HIGH:
+			    SET_BIT(PORTA_REG, copy_u8PinId);
+			    break;
+			    case DIO_PIN_LOW:
+			    CLR_BIT(PORTA_REG, copy_u8PinId);
+			    break;
+		    }
+		    break;
+		    case DIO_PORTB:
+		    switch(copy_u8PinValue){
+			    case DIO_PIN_HIGH:
+			    SET_BIT(PORTB_REG, copy_u8PinId);
+			    break;
+			    case DIO_PIN_LOW:
+			    CLR_BIT(PORTB_REG, copy_u8PinId);
+			    break;
+		    }
+		    break;
+		    case DIO_PORTC:
+		    switch(copy_u8PinValue){
+			    case DIO_PIN_HIGH:
+			    SET_BIT(PORTC_REG, copy_u8PinId);
+			    break;
+			    case DIO_PIN_LOW:
+			    CLR_BIT(PORTC_REG, copy_u8PinId);
+			    break;
+		    }
+		    break;
+		    case DIO_PORTD:
+		    switch(copy_u8PinValue){
+			    case DIO_PIN_HIGH:
+			    SET_BIT(PORTD_REG, copy_u8PinId);
+			    break;
+			    case DIO_PIN_LOW:
+			    CLR_BIT(PORTD_REG, copy_u8PinId);
+			    break;
+		    }
+		    break;
+	    }
+	    
+    }
+    else{
+	    //	Do Nothing
+	    //Unit testing
+	    //local_u8ErrorState = false;
+    }
+    //return local_u8ErrorState;
+}
+
+// Implement other DIO functions similarly
+
+
+
 
 /*Pin Apis*/
-void DIO_voidSetPinDirection				(u8 copy_u8PortId, u8 copy_u8PinId,u8 copy_u8PinDirection){
-	// constant values use switch (Faster)
-	switch (copy_u8PortId)
-	{
-		/*Port A*/
-		case DIO_PORTA:
-			switch(copy_u8PinDirection){
-				case DIO_PIN_OUTPUT:
-					SET_BIT(DDRA_REG,copy_u8PinId);
-				break;
-			
-				case DIO_PIN_INPUT:
-					CLR_BIT(DDRA_REG,copy_u8PinId);
-				break;
-			}
-		break;	
-		/*Port B*/
-		case DIO_PORTB:
-		switch(copy_u8PinDirection){
-			case DIO_PIN_OUTPUT:
-			SET_BIT(DDRB_REG,copy_u8PinId);
-			break;
-			
-			case DIO_PIN_INPUT:
-			CLR_BIT(DDRB_REG,copy_u8PinId);
-			break;
-		}
-		break;
-		/*Port C*/
-		case DIO_PORTC:
-		switch(copy_u8PinDirection){
-			case DIO_PIN_OUTPUT:
-			SET_BIT(DDRC_REG,copy_u8PinId);
-			break;
-			
-			case DIO_PIN_INPUT:
-			CLR_BIT(DDRC_REG,copy_u8PinId);
-			break;
-		}
-		break;
-		/*Port A*/
-		case DIO_PORTD:
-		switch(copy_u8PinDirection){
-			case DIO_PIN_OUTPUT:
-			SET_BIT(DDRD_REG,copy_u8PinId);
-			break;
-			
-			case DIO_PIN_INPUT:
-			CLR_BIT(DDRD_REG,copy_u8PinId);
-			break;
-		}
-		break;
-	}
-}
 
-void DIO_voidSetPinValue					(u8 copy_u8PortId, u8 copy_u8PinId,u8 copy_u8PinValue){
-	//u8 local_u8ErrorState = true;
-	// clean code "MISRA C"
-	if ((copy_u8PortId<4) && (copy_u8PortId<8) && (copy_u8PinValue<3)){
-		switch(copy_u8PortId){
-			case DIO_PORTA:
-				switch(copy_u8PinValue){
-					case DIO_PIN_HIGH:
-						SET_BIT(PORTA_REG, copy_u8PinId);
-					break;
-					case DIO_PIN_LOW:
-						CLR_BIT(PORTA_REG, copy_u8PinId);
-					break;
-				}
-			break;
-			case DIO_PORTB:
-			switch(copy_u8PinValue){
-				case DIO_PIN_HIGH:
-				SET_BIT(PORTB_REG, copy_u8PinId);
-				break;
-				case DIO_PIN_LOW:
-				CLR_BIT(PORTB_REG, copy_u8PinId);
-				break;
-			}
-			break;
-			case DIO_PORTC:
-			switch(copy_u8PinValue){
-				case DIO_PIN_HIGH:
-				SET_BIT(PORTC_REG, copy_u8PinId);
-				break;
-				case DIO_PIN_LOW:
-				CLR_BIT(PORTC_REG, copy_u8PinId);
-				break;
-			}
-			break;
-			case DIO_PORTD:
-			switch(copy_u8PinValue){
-				case DIO_PIN_HIGH:
-				SET_BIT(PORTD_REG, copy_u8PinId);
-				break;
-				case DIO_PIN_LOW:
-				CLR_BIT(PORTD_REG, copy_u8PinId);
-				break;
-			}
-			break;
-		}
-		
-	}
-	else{
-		//	Do Nothing
-		//Unit testing 
-		//local_u8ErrorState = false;
-	}
-	//return local_u8ErrorState;
-}
+
+
 void DIO_voidGetPinValue					(u8 copy_u8PortId, u8 copy_u8PinId,u8* copy_pu8PinValue){
 	// NULL is not keyword 
 	if((copy_u8PortId < 4) && (copy_u8PinId < 8) && (copy_pu8PinValue != NULL)){
