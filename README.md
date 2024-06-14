@@ -139,4 +139,3 @@ secured-home-embedded-system/
 - C Compiler (e.g., GCC)
 - Embedded system development environment (e.g., microchip Studio)
 - Necessary hardware components as listed above
-```
