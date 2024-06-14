@@ -41,8 +41,13 @@ This project implements a secured home embedded system designed to control acces
    - If the entered password matches the decrypted password, the motor is activated to unlock the door, and the servo motor disengages the lock.
    - LEDs and buzzer provide feedback on the success or failure of the attempt.
 
+## Circuit Diagram
+
+![Circuit Diagram](https://github.com/Merve-1/securedHome/blob/main/Circuit%20.png?raw=true)
+
 ## Directory Structure
 
+```
 secured-home-embedded-system/
 │
 ├── hal/                    # Hardware Abstraction Layer
@@ -61,7 +66,8 @@ secured-home-embedded-system/
 │   │       └── keypad_program.c
 │   ├── buzzer/
 │   │   ├── inc/
-│   │   │   └── buzzer_interface.h
+│   │   │   ├── buzzer_interface.h
+│   │   │   └── buzzer_config.h
 │   │   └── src/
 │   │       └── buzzer_program.c
 │   ├── dc/
@@ -72,12 +78,14 @@ secured-home-embedded-system/
 │   │       └── dc_program.c
 │   ├── led/
 │   │   ├── inc/
-│   │   │   └── led_interface.h
+│   │   │   ├── led_interface.h
+│   │   │   └── led_config.h
 │   │   └── src/
 │   │       └── led_program.c
 │   ├── servo/
 │   │   ├── inc/
-│   │   │   └── servo_interface.h
+│   │   │   ├── servo_interface.h
+│   │   │   └── servo_config.h
 │   │   └── src/
 │   │       └── servo_program.c
 │
@@ -122,13 +130,13 @@ secured-home-embedded-system/
 │
 ├── main.c
 └── README.md
-
+```
 
 ## Getting Started
 
 ### Prerequisites
 
 - C Compiler (e.g., GCC)
-- Embedded system development environment (e.g., Arduino IDE, AVR Studio)
+- Embedded system development environment (e.g., microchip Studio)
 - Necessary hardware components as listed above
-
+```
