@@ -43,14 +43,13 @@ This project implements a secured home embedded system designed to control acces
 
 ## Directory Structure
 
-```
 secured-home-embedded-system/
 │
 ├── hal/                    # Hardware Abstraction Layer
 │   ├── lcd/
 │   │   ├── inc/
 │   │   │   ├── lcd_interface.h
-|   |   |   ├── lcd_private.h
+│   │   │   ├── lcd_private.h
 │   │   │   └── lcd_config.h
 │   │   └── src/
 │   │       └── lcd_program.c
@@ -62,22 +61,25 @@ secured-home-embedded-system/
 │   │       └── keypad_program.c
 │   ├── buzzer/
 │   │   ├── inc/
-│   │   │   ├── buzzer_interface.h
-│   │   │   └── buzzer_config.h
+│   │   │   └── buzzer_interface.h
 │   │   └── src/
 │   │       └── buzzer_program.c
-│   ├── motor/
+│   ├── dc/
 │   │   ├── inc/
-│   │   │   ├── motor_interface.h
-│   │   │   └── motor_config.h
+│   │   │   ├── dc_interface.h
+│   │   │   └── dc_config.h
 │   │   └── src/
-│   │       └── motor_program.c
-│   └── eeprom/
-│       ├── inc/
-│       │   ├── eeprom_interface.h
-│       │   └── eeprom_config.h
-│       └── src/
-│           └── eeprom_program.c
+│   │       └── dc_program.c
+│   ├── led/
+│   │   ├── inc/
+│   │   │   └── led_interface.h
+│   │   └── src/
+│   │       └── led_program.c
+│   ├── servo/
+│   │   ├── inc/
+│   │   │   └── servo_interface.h
+│   │   └── src/
+│   │       └── servo_program.c
 │
 ├── mcal/                   # Microcontroller Abstraction Layer
 │   ├── dio/
@@ -86,12 +88,30 @@ secured-home-embedded-system/
 │   │   │   └── dio_register.h
 │   │   └── src/
 │   │       └── dio_program.c
-│   └── exti/
-│       ├── inc/
-│       │   ├── exti_interface.h
-│       │   └── exti_register.h
-│       └── src/
-│           └── exti_program.c
+│   ├── eeprom/
+│   │   ├── inc/
+│   │   │   ├── eeprom_interface.h
+│   │   │   └── eeprom_config.h
+│   │   └── src/
+│   │       └── eeprom_program.c
+│   ├── exti/
+│   │   ├── inc/
+│   │   │   ├── exti_interface.h
+│   │   │   └── exti_register.h
+│   │   └── src/
+│   │       └── exti_program.c
+│   ├── pwm/
+│   │   ├── inc/
+│   │   │   ├── pwm_interface.h
+│   │   │   └── pwm_config.h
+│   │   └── src/
+│   │       └── pwm_program.c
+│   ├── uart/
+│   │   ├── inc/
+│   │   │   ├── uart_interface.h
+│   │   │   └── uart_config.h
+│   │   └── src/
+│   │       └── uart_program.c
 │
 ├── aes/
 │   ├── inc/
@@ -102,7 +122,7 @@ secured-home-embedded-system/
 │
 ├── main.c
 └── README.md
-```
+
 
 ## Getting Started
 
