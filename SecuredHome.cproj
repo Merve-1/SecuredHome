@@ -95,68 +95,70 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
       <AvrGcc>
-        <avrgcc.common.Device>-mmcu=atmega32 -B "%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\gcc\dev\atmega32"</avrgcc.common.Device>
-        <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
-        <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
-        <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
-        <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
-        <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
-        <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
-        <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
-        <avrgcc.compiler.symbols.DefSymbols>
-          <ListValues>
-            <Value>DEBUG</Value>
-          </ListValues>
-        </avrgcc.compiler.symbols.DefSymbols>
-        <avrgcc.compiler.directories.IncludePaths>
-          <ListValues>
-            <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\include\</Value>
-            <Value>../UTILES_LIB</Value>
-            <Value>../HAL/LCD/inc</Value>
-            <Value>../HAL/LCD/src</Value>
-            <Value>../MCAL/DIO/inc</Value>
-            <Value>../MCAL/DIO/src</Value>
-            <Value>../HAL/LED/inc</Value>
-            <Value>../HAL/LED/src</Value>
-            <Value>../HAL/BUZZER/inc</Value>
-            <Value>../HAL/BUZZER/src</Value>
-            <Value>../HAL/SWITCH/inc</Value>
-            <Value>../HAL/SWITCH/src</Value>
-            <Value>../HAL/KEYPAD/inc</Value>
-            <Value>../HAL/KEYPAD/src</Value>
-            <Value>../MCAL/EXTI/inc</Value>
-            <Value>../MCAL/EXTI/src</Value>
-            <Value>../MCAL/PWM/inc</Value>
-            <Value>../MCAL/PWM/src</Value>
-            <Value>../HAL/DC/inc</Value>
-            <Value>../HAL/DC/src</Value>
-            <Value>../HAL/Servo/inc</Value>
-            <Value>../HAL/Servo/src</Value>
-            <Value>../HAL/EEPROM/inc</Value>
-            <Value>../HAL/EEPROM/src</Value>
-            <Value>../MCAL/TWI/inc</Value>
-            <Value>../MCAL/TWI/src</Value>
-            <Value>../AES/inc</Value>
-            <Value>../AES/src</Value>
-          </ListValues>
-        </avrgcc.compiler.directories.IncludePaths>
-        <avrgcc.compiler.optimization.level>Optimize debugging experience (-Og)</avrgcc.compiler.optimization.level>
-        <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
-        <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
-        <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
-        <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
-        <avrgcc.linker.libraries.Libraries>
-          <ListValues>
-            <Value>libm</Value>
-          </ListValues>
-        </avrgcc.linker.libraries.Libraries>
-        <avrgcc.assembler.general.IncludePaths>
-          <ListValues>
-            <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\include\</Value>
-          </ListValues>
-        </avrgcc.assembler.general.IncludePaths>
-        <avrgcc.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcc.assembler.debugging.DebugLevel>
-      </AvrGcc>
+  <avrgcc.common.Device>-mmcu=atmega32 -B "%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\gcc\dev\atmega32"</avrgcc.common.Device>
+  <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+  <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+  <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+  <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+  <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+  <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>DEBUG</Value>
+    </ListValues>
+  </avrgcc.compiler.symbols.DefSymbols>
+  <avrgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\include\</Value>
+      <Value>../UTILES_LIB</Value>
+      <Value>../HAL/LCD/inc</Value>
+      <Value>../HAL/LCD/src</Value>
+      <Value>../MCAL/DIO/inc</Value>
+      <Value>../MCAL/DIO/src</Value>
+      <Value>../HAL/LED/inc</Value>
+      <Value>../HAL/LED/src</Value>
+      <Value>../HAL/BUZZER/inc</Value>
+      <Value>../HAL/BUZZER/src</Value>
+      <Value>../HAL/SWITCH/inc</Value>
+      <Value>../HAL/SWITCH/src</Value>
+      <Value>../HAL/KEYPAD/inc</Value>
+      <Value>../HAL/KEYPAD/src</Value>
+      <Value>../MCAL/EXTI/inc</Value>
+      <Value>../MCAL/EXTI/src</Value>
+      <Value>../MCAL/PWM/inc</Value>
+      <Value>../MCAL/PWM/src</Value>
+      <Value>../HAL/DC/inc</Value>
+      <Value>../HAL/DC/src</Value>
+      <Value>../HAL/Servo/inc</Value>
+      <Value>../HAL/Servo/src</Value>
+      <Value>../MCAL/TWI/inc</Value>
+      <Value>../MCAL/TWI/src</Value>
+      <Value>../AES/inc</Value>
+      <Value>../AES/src</Value>
+      <Value>../MCAL/UART/inc</Value>
+      <Value>../MCAL/UART/src</Value>
+      <Value>../MCAL/EEPROM/src</Value>
+      <Value>../MCAL/EEPROM/inc</Value>
+    </ListValues>
+  </avrgcc.compiler.directories.IncludePaths>
+  <avrgcc.compiler.optimization.level>Optimize debugging experience (-Og)</avrgcc.compiler.optimization.level>
+  <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+  <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
+  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+  <avrgcc.linker.libraries.Libraries>
+    <ListValues>
+      <Value>libm</Value>
+    </ListValues>
+  </avrgcc.linker.libraries.Libraries>
+  <avrgcc.assembler.general.IncludePaths>
+    <ListValues>
+      <Value>%24(PackRepoDir)\atmel\ATmega_DFP\1.7.374\include\</Value>
+    </ListValues>
+  </avrgcc.assembler.general.IncludePaths>
+  <avrgcc.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcc.assembler.debugging.DebugLevel>
+</AvrGcc>
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
@@ -187,7 +189,7 @@
     <Compile Include="HAL\EEPROM\inc\EEPROM_interface.h">
       <SubType>compile</SubType>
     </Compile>
-    <Compile Include="HAL\EEPROM\inc\EEPROM_private.h">
+    <Compile Include="HAL\EEPROM\inc\EEPROM_register.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="HAL\EEPROM\src\EEPROM_program.c">
@@ -274,6 +276,15 @@
     <Compile Include="MCAL\TWI\src\TWI_program.c">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="MCAL\UART\inc\UART_interface.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MCAL\UART\inc\UART_register.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="MCAL\UART\src\UART_program.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="UTILES_LIB\BIT_MATH.h">
       <SubType>compile</SubType>
     </Compile>
@@ -316,6 +327,7 @@
     <Folder Include="MCAL\EXTI" />
     <Folder Include="MCAL\EXTI\inc" />
     <Folder Include="MCAL\EXTI\src" />
+    <Folder Include="MCAL\UART" />
     <Folder Include="MCAL\TWI" />
     <Folder Include="MCAL\PWM" />
     <Folder Include="MCAL\PWM\inc" />
@@ -323,6 +335,8 @@
     <Folder Include="MCAL\TWI\inc" />
     <Folder Include="MCAL\TWI\src" />
     <Folder Include="AES" />
+    <Folder Include="MCAL\UART\inc" />
+    <Folder Include="MCAL\UART\src" />
     <Folder Include="UTILES_LIB" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />

@@ -32,3 +32,5 @@ MCAL\PWM\src\PWM_program.c
 
 MCAL\TWI\src\TWI_program.c
 
+MCAL\UART\src\UART_program.c
+

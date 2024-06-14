@@ -13,7 +13,8 @@
 
 #define AES_BLOCK_SIZE 16
 
-void AES_init(const uint8_t *key);
-void AES_encrypt(const uint8_t *input, uint8_t *output);
+void AES_init(const u8 *key);
+void AES_encrypt(const u8 *input, u8 *output);
+void AES_decrypt(const u8 *input, u8 *output)
 
 #endif // AES_INTERFACE_H
